@@ -6,12 +6,14 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Toast;
 
 import com.example.devs_hackathon_2023.utils.PermissionUtils;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -88,6 +90,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        googleMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                        this,
+                        R.raw.map_theme
+                )
+        );
         map = googleMap;
         map.setOnMyLocationButtonClickListener(this);
         map.setOnMyLocationClickListener(this);
@@ -124,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
+        Log.i("TAG", "onMyLocationClick: " + location.getLatitude() + " " + location.getLongitude());
         Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
 
