@@ -50,6 +50,7 @@ class MyLocationLayerActivity extends AppCompatActivity
         map.setMyLocationEnabled(true);
         map.setOnMyLocationButtonClickListener(this);
         map.setOnMyLocationClickListener(this);
+
     }
 
     @Override
@@ -66,4 +67,6 @@ class MyLocationLayerActivity extends AppCompatActivity
         // (the camera animates to the user's current position).
         return false;
     }
+
+
 }

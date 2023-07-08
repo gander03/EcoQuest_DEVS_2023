@@ -3,8 +3,11 @@ package com.example.devs_hackathon_2023;
 import android.Manifest;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +15,9 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import com.example.devs_hackathon_2023.utils.PermissionUtils;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.maps);
         mapFragment.getMapAsync(this);
 
+
     }
 
     @Override
@@ -100,6 +106,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.setOnMyLocationButtonClickListener(this);
         map.setOnMyLocationClickListener(this);
         enableMyLocation();
+        onMyLocationButtonClick();
+
+        // Move the camera to the user's location
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            Location lastKnownLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+            if (lastKnownLocation != null) {
+                LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 16f));
+            }
+        }
+
     }
 
     /**
@@ -115,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
             return;
-        }
+        };
 
         // 2. Otherwise, request location permissions from the user.
         PermissionUtils.requestLocationPermissions(this, LOCATION_PERMISSION_REQUEST_CODE, true);
@@ -126,13 +149,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onMyLocationButtonClick() {
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
+        // (the camera animates to the use's current position).
+        Log.d("TAG", "clicked");
+
         return false;
     }
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-        Log.i("TAG", "onMyLocationClick: " + location.getLatitude() + " " + location.getLongitude());
+        Log.d("TAG", "onMyLocationClick: " + location.getLatitude() + " " + location.getLongitude());
+
+
         Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
 
