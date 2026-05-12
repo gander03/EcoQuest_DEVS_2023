@@ -2,7 +2,7 @@
 
 EcoQuest is an Android mobile game that encourages users to engage with and explore the world around them by incentivising exercise through movement and location-based quests and challenges.
 
-Built during the DEVSxGDSC Hackathon, EcoQuest was awarded **1st Place Overall**.
+Built during the 2023 DEVSxGDSC Hackathon, EcoQuest was awarded **1st Place Overall**.
 
 ## Features
 
